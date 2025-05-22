@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from scipy.stats import kstest
 import statistics
 #INFORMACIÓN
+
 mods=["Logi"]
 theta=[0]
 tama=[50,100,200,500,1000]
@@ -34,6 +35,7 @@ for th in theta:
         data["Log"+str(th)+ " "+ str(i)+" Rn"]=[]
         j=0
         NR=[]
+        
         #Newton Raphson con valor inicial el promedio
         while j<tam:
             x=logistic.rvs(size=i)
@@ -58,6 +60,7 @@ for th in theta:
     
 
     
+#Pruebas de Pearson. Se hacen 7 celdas con las probabilidades de una chi2 de 6 grados de libertad 
 #Pruebas de Pearson. Se hacen 7 celdas con las probabilidades de una chi2 de 6 grados de libertad 
 print("Prueba Pearson 7 celdas")
 quant=[0.032404,0.134029,0.32029,0.62669,1.1397,2.1469]
@@ -97,14 +100,20 @@ for est in estim:
         
     print("---------------------------------------------------------")
 
-print("Prueba Kolmogorov smirnof")
-for est in estim:
-    print("Estimador:"+est)
-    for i in tama:
-        print("Tamaño:"+str(i))
-        print(kstest(data["Log"+str(th)+ " "+ str(i)+" "+est],"chi2",(datoschi,1)))
-        print()
 
+for est in estim:
+    
+    for i in tama:
+        print("Resultado K-S para Estimador:"+est+" Tamaño:"+str(i))
+        
+        pvalue=kstest(data["Log"+str(th)+ " "+ str(i)+" "+est],datoschi)[1]
+        if pvalue>=0.05:
+            print("Como pvalue="+str(pvalue)+" es mayor a 0.05  entonces se acepta la hipotesis H0")
+        else:
+            print("Como pvalue="+str(pvalue)+" es menor a 0.05 entonces se rechaza la hipotesis H0 ")
+        print(kstest(data["Log"+str(th)+ " "+ str(i)+" "+est],datoschi))
+        print()
+    print("---------------------------------------------------------")
 
 
      
